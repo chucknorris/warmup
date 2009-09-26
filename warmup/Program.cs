@@ -11,7 +11,9 @@
             // warmup web FHLBank.Grouping
             string templateName = args[0];
             string name = args[1];
-            var baseUri = new Uri(ConfigurationManager.AppSettings["svn"] + templateName);
+
+            //svn only
+            var baseUri = new Uri(ConfigurationManager.AppSettings["source_control"] + templateName);
             var td = new TargetDir(name);
             Svn.Export(baseUri, td);
             td.ReplaceTokens(name);
