@@ -8,11 +8,22 @@ namespace warmup
         public static void Export(Uri sourceLocation, TargetDir target)
         {
             var psi = new ProcessStartInfo("svn", string.Format("export {0} {1}", sourceLocation, target.FullPath));
+            
+            psi.UseShellExecute = false;
+            psi.CreateNoWindow = true;
+            psi.RedirectStandardOutput = true;
+            psi.RedirectStandardError = true;
+            
+            //todo: better error handling
+            string output, error = "";
             using (var p = Process.Start(psi))
             {
-                //log
-                p.WaitForExit();
+                output = p.StandardOutput.ReadToEnd();
+                error = p.StandardError.ReadToEnd();
             }
+
+            Console.WriteLine(output);
+            Console.WriteLine(error);
         }
     }
 }

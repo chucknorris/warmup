@@ -15,7 +15,10 @@
             //svn only
             var baseUri = new Uri(ConfigurationManager.AppSettings["source_control"] + templateName);
             var td = new TargetDir(name);
+            Console.WriteLine("svn exporting to: {0}", td.FullPath);
             Svn.Export(baseUri, td);
+
+            Console.WriteLine("replacing tokens");
             td.ReplaceTokens(name);
         }
     }
