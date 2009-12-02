@@ -2,6 +2,7 @@ namespace warmup
 {
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
 
     [DebuggerDisplay("{FullPath}")]
     public class TargetDir
@@ -41,6 +42,11 @@ namespace warmup
             foreach (var info in di.GetFiles("*.*", SearchOption.AllDirectories))
             {
                 info.MoveTo(info.FullName.Replace("__NAME__", name));
+                
+                //don't do this on exe's or dll's
+                if(new []{"exe","dll"}.Contains(info.Extension))
+                    continue;
+
                 //process contents
                 var contents = File.ReadAllText(info.FullName);
                 contents = contents.Replace("__NAME__", name);
