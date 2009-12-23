@@ -27,6 +27,8 @@ namespace warmup
             //move all directories
             MoveAllDirectories(startingPoint, name);
 
+            startingPoint = new DirectoryInfo(startingPoint.FullName.Replace("__NAME__", name));
+
             //move all files
             MoveAllFiles(startingPoint, name);
 
@@ -39,7 +41,7 @@ namespace warmup
             foreach (var info in point.GetFiles("*.*", SearchOption.AllDirectories))
             {
                 //don't do this on exe's or dll's
-                if (new[] {".exe", ".dll", ".pdb"}.Contains(info.Extension))
+                if (new[] {".exe", ".dll", ".pdb",".jpg",".png",".gif"}.Contains(info.Extension))
                     continue;
 
                 //process contents
@@ -54,18 +56,38 @@ namespace warmup
             foreach (var file in point.GetFiles("*.*", SearchOption.AllDirectories))
             {
                 var moveTo = file.FullName.Replace("__NAME__", name);
-                file.MoveTo(moveTo);
+                try
+                {
+                    
+                    file.MoveTo(moveTo);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Trying to move '{0}' to '{1}'", file.FullName, moveTo);
+                    throw;
+                }
+                
             }
         }
 
         private void MoveAllDirectories(DirectoryInfo dir, string name)
         {
             DirectoryInfo workingDirectory = dir;
-            if (workingDirectory.Name.StartsWith("__"))
+            if (workingDirectory.Name.Contains("__NAME__"))
             {
-                var moveTo = dir.FullName.Replace("__NAME__", name);
-                workingDirectory.MoveTo(moveTo);
-                workingDirectory = new DirectoryInfo(moveTo);
+                var newFolderName = dir.Name.Replace("__NAME__", name);
+                var moveTo = Path.Combine(dir.Parent.FullName, newFolderName);
+
+                try
+                {
+                    workingDirectory.MoveTo(moveTo);
+                    workingDirectory = new DirectoryInfo(moveTo);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Trying to move '{0}' to '{1}'",workingDirectory.FullName, moveTo);
+                    throw;
+                }
             }
 
             foreach (var info in workingDirectory.GetDirectories())
