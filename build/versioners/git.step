@@ -43,21 +43,21 @@
     <!-- try to update the revision -->
     <getVersionFromGit
       gitExecutableWithPath="git"
-      repoDirectory="${path.to.toplevel}\"
+      repoDirectory="."
       output="_revision.xml"
       failonerror="false"
       />
     <xmlpeek
       file="_revision.xml"
-      xpath="/revision"
+      xpath="/version/revision"
       property="version.revision"
       failonerror="false"/>
     <xmlpeek
       file="_revision.xml"
-      xpath="/hash"
+      xpath="/version/hash"
       property="version.hash"
       failonerror="false"/>
-    <!--<delete file="_revision.xml" failonerror="false" />-->
+    <delete file="_revision.xml" failonerror="false" />
   </target>
 
   <target name="set_version_environment_variable">
