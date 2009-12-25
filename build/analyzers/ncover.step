@@ -20,7 +20,8 @@
   <property name="test.framework" value="mbunit" overwrite="false" />
   <property name="number.satisfactory_coverage" value="85" overwrite="false" />
   <property name="fail.if_ncover_fails" value="false" overwrite="false" />
-  <property name="dirs.lib" value="${dirs.current}\${path.to.toplevel}\lib" overwrite="false" />
+  <property name="folder.references" value="lib" overwrite="false" />
+  <property name="dirs.lib" value="${dirs.current}\${path.to.toplevel}\${folder.references}" overwrite="false" />
   <property name="dirs.ncover_results" value="${path::get-full-path(dirs.build_artifacts)}\ncover" />
   <property name="app.ncover.tester" value="${path::get-full-path(dirs.lib)}\MbUnit2\MbUnit.Cons.exe" overwrite="false" />
   <property name="app.ncover" value="${path::get-full-path(dirs.lib)}\NCover\NCover.Console.exe" overwrite="false" />

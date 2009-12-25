@@ -17,7 +17,8 @@
   <property name="folder.build_artifacts" value="build_artifacts" overwrite="false" />
   <property name="dirs.build_artifacts" value="${path::get-full-path(dirs.build)}\${folder.build_artifacts}" />
   <property name="project.name" value="__SOLUTION_NAME_WITHOUT_SLN_EXTENSION__" overwrite="false" />
-  <property name="dirs.lib" value="${dirs.current}\${path.to.toplevel}\lib" overwrite="false" />
+  <property name="folder.references" value="lib" overwrite="false" />
+  <property name="dirs.lib" value="${dirs.current}\${path.to.toplevel}\${folder.references}" overwrite="false" />
   <property name="dirs.moma_results" value="${path::get-full-path(dirs.build_artifacts)}\monoMigrationAnalyzer" />
   <property name="app.moma" value="${path::get-full-path(dirs.lib)}\MoMA\MoMA.exe" overwrite="false" />
   <property name="file.moma_results" value="${project.name}.MoMAReport.html" />
