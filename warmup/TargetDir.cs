@@ -41,7 +41,7 @@ namespace warmup
             foreach (var info in point.GetFiles("*.*", SearchOption.AllDirectories))
             {
                 //don't do this on exe's or dll's
-                if (new[] {".exe", ".dll", ".pdb",".jpg",".png",".gif"}.Contains(info.Extension))
+                if (new[] {".exe", ".dll", ".pdb",".jpg",".png",".gif",".mst",".msi",".msm"}.Contains(info.Extension))
                     continue;
 
                 //process contents
