@@ -3,3 +3,8 @@ obj
 *.suo
 *.user
 _ReSh*
+code_drop
+build_output
+SolutionVersion.cs
+SolutionVersion.vb
+*.cache

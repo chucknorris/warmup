@@ -1,5 +1,6 @@
 namespace warmup
 {
+    using System;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
@@ -21,36 +22,77 @@ namespace warmup
 
         public void ReplaceTokens(string name)
         {
-            var di = new DirectoryInfo(FullPath);
-            //directories
-            foreach (var info in di.GetDirectories())
-            {
-                foreach (var directory in info.GetDirectories())
-                {
-                    if (info.Name.StartsWith("__"))
-                    {
-                        info.MoveTo(info.FullName.Replace("__NAME__", name));
-                    }
-                }
+            var startingPoint = new DirectoryInfo(FullPath);
 
-                if (info.Name.StartsWith("__"))
-                {
-                    info.MoveTo(info.FullName.Replace("__NAME__", name));
-                }
-            }
+            //move all directories
+            MoveAllDirectories(startingPoint, name);
 
-            foreach (var info in di.GetFiles("*.*", SearchOption.AllDirectories))
+            startingPoint = new DirectoryInfo(startingPoint.FullName.Replace("__NAME__", name));
+
+            //move all files
+            MoveAllFiles(startingPoint, name);
+
+            //replace file content
+            ReplaceTokensInTheFiles(startingPoint, name);
+        }
+
+        private void ReplaceTokensInTheFiles(DirectoryInfo point, string name)
+        {
+            foreach (var info in point.GetFiles("*.*", SearchOption.AllDirectories))
             {
-                info.MoveTo(info.FullName.Replace("__NAME__", name));
-                
                 //don't do this on exe's or dll's
-                if(new []{"exe","dll"}.Contains(info.Extension))
+                if (new[] {".exe", ".dll", ".pdb",".jpg",".png",".gif",".mst",".msi",".msm",".gitignore",".idx",".pack"}.Contains(info.Extension))
                     continue;
 
                 //process contents
                 var contents = File.ReadAllText(info.FullName);
                 contents = contents.Replace("__NAME__", name);
                 File.WriteAllText(info.FullName, contents);
+            }
+        }
+
+        private void MoveAllFiles(DirectoryInfo point, string name)
+        {
+            foreach (var file in point.GetFiles("*.*", SearchOption.AllDirectories))
+            {
+                var moveTo = file.FullName.Replace("__NAME__", name);
+                try
+                {
+                    
+                    file.MoveTo(moveTo);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Trying to move '{0}' to '{1}'", file.FullName, moveTo);
+                    throw;
+                }
+                
+            }
+        }
+
+        private void MoveAllDirectories(DirectoryInfo dir, string name)
+        {
+            DirectoryInfo workingDirectory = dir;
+            if (workingDirectory.Name.Contains("__NAME__"))
+            {
+                var newFolderName = dir.Name.Replace("__NAME__", name);
+                var moveTo = Path.Combine(dir.Parent.FullName, newFolderName);
+
+                try
+                {
+                    workingDirectory.MoveTo(moveTo);
+                    workingDirectory = new DirectoryInfo(moveTo);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Trying to move '{0}' to '{1}'",workingDirectory.FullName, moveTo);
+                    throw;
+                }
+            }
+
+            foreach (var info in workingDirectory.GetDirectories())
+            {
+                MoveAllDirectories(info, name);
             }
         }
     }

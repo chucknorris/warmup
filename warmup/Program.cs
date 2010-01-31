@@ -1,21 +1,33 @@
 ﻿namespace warmup
 {
     using System;
-    using System.Configuration;
+    using settings;
 
     internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             //parse out command line
             // warmup web FHLBank.Grouping
             string templateName = args[0];
             string name = args[1];
 
-            //svn only
-            var baseUri = new Uri(ConfigurationManager.AppSettings["source_control"] + templateName);
+            var baseUri = new Uri(WarmupConfiguration.settings.SourceControlWarmupLocation + templateName);
             var td = new TargetDir(name);
-            Svn.Export(baseUri, td);
+            
+            switch (WarmupConfiguration.settings.SourceControlType)
+            {
+                case SourceControlType.Subversion:
+                    Console.WriteLine("svn exporting to: {0}", td.FullPath);
+                    Svn.Export(baseUri, td);
+                    break;
+                case SourceControlType.Git:
+                    Console.WriteLine("Hardcore git cloning action to: {0}", td.FullPath);
+                    Git.Clone(baseUri, td);
+                    break;
+            }
+
+            Console.WriteLine("replacing tokens");
             td.ReplaceTokens(name);
         }
     }
