@@ -1,4 +1,4 @@
-Warmup - Go from Zero to Hero in seconds
+Warmup - From Zero to a Solution w/everything in seconds. Your templates, your choices.
 =======
 
 # LICENSE
@@ -14,17 +14,15 @@ Warmup allows you to define templates for entire projects and change them as tec
 ## Getting started with Warmup
 
 
-
 ### Downloads
 
  You can download Warmup from http://github.com/drusellers/Warmup
 
-You can also obtain a copy from the build server at __REPLACE__.
 
 ### Source
 This is the best way to get to the bleeding edge of what we are doing.
 
-1. Clone the source down to your machine. 
+1. Clone the source down to your machine.  
   `git clone git://github.com/drussellers/warmup.git`
 2. Run `build.bat`. NOTE: You must have git on the path (open a regular command line and type git).
 

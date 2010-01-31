@@ -14,13 +14,15 @@
 
             var baseUri = new Uri(WarmupConfiguration.settings.SourceControlWarmupLocation + templateName);
             var td = new TargetDir(name);
-            Console.WriteLine("svn exporting to: {0}", td.FullPath);
+            
             switch (WarmupConfiguration.settings.SourceControlType)
             {
                 case SourceControlType.Subversion:
+                    Console.WriteLine("svn exporting to: {0}", td.FullPath);
                     Svn.Export(baseUri, td);
                     break;
                 case SourceControlType.Git:
+                    Console.WriteLine("Hardcore git cloning action to: {0}", td.FullPath);
                     Git.Clone(baseUri, td);
                     break;
             }
