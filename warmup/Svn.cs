@@ -16,6 +16,7 @@ namespace warmup
             psi.RedirectStandardError = true;
             
             //todo: better error handling
+            Console.WriteLine("Running: {0} {1}", psi.FileName, psi.Arguments);
             string output, error = "";
             using (var p = Process.Start(psi))
             {
