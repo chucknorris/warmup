@@ -7,7 +7,8 @@ namespace warmup
     {
         public static void Export(Uri sourceLocation, TargetDir target)
         {
-            var psi = new ProcessStartInfo("svn", string.Format("export {0} {1}", sourceLocation, target.FullPath));
+            var psi = new ProcessStartInfo("svn", 
+                string.Format("export {0} {1}", sourceLocation, target.FullPath));
             
             psi.UseShellExecute = false;
             psi.CreateNoWindow = true;
