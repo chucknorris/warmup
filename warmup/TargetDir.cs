@@ -41,8 +41,9 @@ namespace warmup
             foreach (var info in point.GetFiles("*.*", SearchOption.AllDirectories))
             {
                 //don't do this on exe's or dll's
-                if (new[] {".exe", ".dll", ".pdb",".jpg",".png",".gif",".mst",".msi",".msm",".gitignore",".idx",".pack"}.Contains(info.Extension))
-                    continue;
+                if (new[] {".exe", ".dll", ".pdb",".jpg",".png",".gif",".mst",".msi",".msm",".gitignore",".idx",".pack"}.Contains(info.Extension)) continue;
+                //skip the .git directory
+                if (new[] { "\\.git\\" }.Contains(info.FullName)) continue;
 
                 //process contents
                 var contents = File.ReadAllText(info.FullName);
