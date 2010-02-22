@@ -43,8 +43,20 @@ namespace warmup.settings
                 {
                     return SourceControlType.Git;
                 }
+                if (SourceControl.Contains("File"))
+                {
+                    return SourceControlType.FileSystem;
+                }
 
                 return SourceControlType.Subversion;
+            }
+        }
+        [ConfigurationProperty("ignoredExtensions", IsDefaultCollection = false)]
+        public IgnoredFileTypeCollection IgnoredFileTypeCollection
+        {
+            get
+            {
+                return (IgnoredFileTypeCollection)base["ignoredExtensions"];
             }
         }
 
