@@ -8,7 +8,7 @@ namespace warmup.settings
 
     using System;
     using System.Configuration;
-    public class IgnoredFileTypeCollection : ConfigurationElementCollection, IEnumerable<IgnoredFileType>
+    public class IgnoredFileTypeCollection : ConfigurationElementCollection//, IEnumerable<IgnoredFileType>
     {
         protected override ConfigurationElement CreateNewElement()
         {

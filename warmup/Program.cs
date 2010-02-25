@@ -12,23 +12,26 @@
             string templateName = args[0];
             string name = args[1];
 
-            var baseUri = new Uri(WarmupConfiguration.settings.SourceControlWarmupLocation + templateName);
             var td = new TargetDir(name);
-            
+            var exporter = GetExporter();
+            exporter.Export(WarmupConfiguration.settings.SourceControlWarmupLocation, templateName, td);
+            Console.WriteLine("replacing tokens");
+            td.ReplaceTokens(name);
+        }
+
+        private static IExporter GetExporter()
+        {
             switch (WarmupConfiguration.settings.SourceControlType)
             {
                 case SourceControlType.Subversion:
-                    Console.WriteLine("svn exporting to: {0}", td.FullPath);
-                    Svn.Export(baseUri, td);
-                    break;
+                    return new Svn();
                 case SourceControlType.Git:
-                    Console.WriteLine("Hardcore git cloning action to: {0}", td.FullPath);
-                    Git.Clone(baseUri, td);
-                    break;
+                    return new Git();
+                case SourceControlType.FileSystem:
+                    return new Folder();
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-
-            Console.WriteLine("replacing tokens");
-            td.ReplaceTokens(name);
         }
     }
 }

@@ -26,6 +26,14 @@ namespace warmup.settings
         {
             get { return (string)this["sourceControlWarmupLocation"]; }
         }
+        /// <summary>
+        /// The token to replace in the warmup templates. Not required, default value is "__NAME__"
+        /// </summary>
+        [ConfigurationProperty("replacementToken", IsRequired = false, DefaultValue = "__NAME__")]
+        public string ReplacementToken
+        {
+            get { return (string)this["replacementToken"]; }
+        }
 
         /// <summary>
         /// What type of source control are we using?

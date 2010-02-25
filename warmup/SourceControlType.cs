@@ -4,5 +4,6 @@ namespace warmup
     {
         Subversion
         ,Git
+        ,FileSystem
     }
 }

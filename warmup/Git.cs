@@ -1,10 +1,12 @@
+using warmup.settings;
+
 namespace warmup
 {
     using System;
     using System.Diagnostics;
     using System.IO;
 
-    public class Git
+    public class Git : IExporter
     {
         public static void Clone(Uri sourceLocation, TargetDir target)
         {
@@ -44,6 +46,12 @@ namespace warmup
 
             }
 
+        }
+        public void Export(string sourceControlWarmupLocation, string templateName, TargetDir targetDir)
+        {
+            var baseUri = new Uri(WarmupConfiguration.settings.SourceControlWarmupLocation + templateName);
+            Console.WriteLine("svn exporting to: {0}", targetDir.FullPath);
+            Clone(baseUri, targetDir);
         }
     }
 }
