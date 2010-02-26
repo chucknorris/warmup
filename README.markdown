@@ -13,10 +13,14 @@ Warmup allows you to define templates for entire projects and change them as tec
 
 ## Getting started with Warmup
 
+in the location you wan the new solution to reside run:
+  [warmuppath]warmup.exe [template] [newSolutionName]
+ensure that the warmup.exe.config  has the correct path to your templates
 
 ### Downloads
 
- You can download Warmup from http://github.com/drusellers/Warmup
+ You can download the original Warmup from http://github.com/drusellers/Warmup
+ You can download this fork of Warmup from http://github.com/rhysc/Warmup
 
 
 ### Source
@@ -32,7 +36,7 @@ This is the best way to get to the bleeding edge of what we are doing.
 
 # DONATE
 
-Donations Accepted - If you enjoy using this product or it has saved you time and money in some way, please consider making a donation. 
+Donations Accepted - If you enjoy using this product or it has saved you time and money in some way, please consider making a donation (to the original author!). 
 
 It helps keep to the product updated, pays for site hosting, etc.
 
