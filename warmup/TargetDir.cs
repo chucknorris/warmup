@@ -1,18 +1,29 @@
-using System.Collections.Generic;
-using warmup.settings;
-
+// Copyright 2007-2010 The Apache Software Foundation.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
+// this file except in compliance with the License. You may obtain a copy of the 
+// License at 
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software distributed 
+// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+// CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+// specific language governing permissions and limitations under the License.
 namespace warmup
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using settings;
 
     [DebuggerDisplay("{FullPath}")]
     public class TargetDir
     {
         readonly string _path;
-        private readonly string _replacementToken;
+        readonly string _replacementToken;
 
         public TargetDir(string path)
         {
@@ -41,23 +52,23 @@ namespace warmup
             ReplaceTokensInTheFiles(startingPoint, name);
         }
 
-        private void ReplaceTokensInTheFiles(DirectoryInfo point, string name)
+        void ReplaceTokensInTheFiles(DirectoryInfo point, string name)
         {
             List<string> ignoredExtensions = GetIgnoredExtensions();
             foreach (var info in point.GetFiles("*.*", SearchOption.AllDirectories))
             {
                 if (ignoredExtensions.Contains(info.Extension)) continue;
                 //skip the .git directory
-                if (new[] { "\\.git\\" }.Contains(info.FullName)) continue;
+                if (new[] {"\\.git\\"}.Contains(info.FullName)) continue;
 
                 //process contents
-                var contents = File.ReadAllText(info.FullName);
+                string contents = File.ReadAllText(info.FullName);
                 contents = contents.Replace(_replacementToken, name);
                 File.WriteAllText(info.FullName, contents);
             }
         }
 
-        private static List<string> GetIgnoredExtensions()
+        static List<string> GetIgnoredExtensions()
         {
             var extension = new List<string>();
             foreach (IgnoredFileType ignoredFileType in WarmupConfiguration.settings.IgnoredFileTypeCollection)
@@ -67,14 +78,13 @@ namespace warmup
             return extension;
         }
 
-        private void MoveAllFiles(DirectoryInfo point, string name)
+        void MoveAllFiles(DirectoryInfo point, string name)
         {
             foreach (var file in point.GetFiles("*.*", SearchOption.AllDirectories))
             {
-                var moveTo = file.FullName.Replace(_replacementToken, name);
+                string moveTo = file.FullName.Replace(_replacementToken, name);
                 try
                 {
-
                     file.MoveTo(moveTo);
                 }
                 catch (Exception)
@@ -82,17 +92,16 @@ namespace warmup
                     Console.WriteLine("Trying to move '{0}' to '{1}'", file.FullName, moveTo);
                     throw;
                 }
-
             }
         }
 
-        private void MoveAllDirectories(DirectoryInfo dir, string name)
+        void MoveAllDirectories(DirectoryInfo dir, string name)
         {
             DirectoryInfo workingDirectory = dir;
             if (workingDirectory.Name.Contains(_replacementToken))
             {
-                var newFolderName = dir.Name.Replace(_replacementToken, name);
-                var moveTo = Path.Combine(dir.Parent.FullName, newFolderName);
+                string newFolderName = dir.Name.Replace(_replacementToken, name);
+                string moveTo = Path.Combine(dir.Parent.FullName, newFolderName);
 
                 try
                 {
