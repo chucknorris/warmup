@@ -50,6 +50,7 @@
     </Compile>
     <Compile Include="Folder.cs" />
     <Compile Include="Git.cs" />
+    <Compile Include="GitTemplateExtractor.cs" />
     <Compile Include="IExporter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -120,5 +120,17 @@ namespace warmup
                 MoveAllDirectories(info, name);
             }
         }
+
+        public void MoveToDestination(string target)
+        {
+            if (string.IsNullOrEmpty(target)) return;
+            if (!Directory.Exists(target)) return;
+            if (target == FullPath) return;
+
+            DirectoryInfo folder = new DirectoryInfo(FullPath);
+            var destination = Path.Combine(target, folder.Name);
+            Console.WriteLine(string.Format("move {0} to {1}", FullPath, destination));
+            folder.MoveTo(destination);
+        }
     }
 }

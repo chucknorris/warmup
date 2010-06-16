@@ -23,12 +23,15 @@ namespace warmup
             // warmup web FHLBank.Grouping
             string templateName = args[0];
             string name = args[1];
+            string target = null;
+            if (args.Length > 2) target = args[2];
 
             var td = new TargetDir(name);
             IExporter exporter = GetExporter();
             exporter.Export(WarmupConfiguration.settings.SourceControlWarmupLocation, templateName, td);
             Console.WriteLine("replacing tokens");
             td.ReplaceTokens(name);
+            td.MoveToDestination(target);
         }
 
         static IExporter GetExporter()
