@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<project name="__REPLACE__" default="go">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project name="CUSTOM POST GEMSPREPARE" default="go">
   <!-- Project UppercuT - http://projectuppercut.org -->
   <property name="build.config.settings" value="__NONE__" overwrite="false" />
   <include buildfile="${build.config.settings}" if="${file::exists(build.config.settings)}" />
@@ -30,21 +30,22 @@
   <property name="dirs.docs" value="${dirs.current}\${path.to.toplevel}\${folder.documentation}" overwrite="false" />
   <property name="folder.references" value="lib" overwrite="false" />
   <property name="dirs.lib" value="${dirs.current}\${path.to.toplevel}\${folder.references}" overwrite="false" />
-
-  <target name="go" depends="run_tasks" />
-
-  <target name="run_tasks">
-    <!-- INSERT YOUR TASKS HERE OR CALL OUT TO OTHER TASKS -->
-    <!-- Sample provided below that you can customize -->
-  </target>
+  <property name="folders.gems" value="gems" overwrite="false" />
   
-  <!--<target name="documentation">
-    <echo message="Packaging documentation files to ${dirs.drop}\${folder.documentation}."/>
-    <copy todir="${dirs.drop}\${folder.documentation}">
-      <fileset basedir="${dirs.build}\${folder.documentation}">
+  <target name="go" depends="run_tasks" />
+  
+  <target name="run_tasks">
+    <copy todir="${dirs.drop}\${folder.gems}\bin">
+      <fileset basedir="${dirs.drop}\${folder.app.drop}">
         <include name="**/*.*" />
       </fileset>
     </copy>
-  </target>-->
-  
+    
+    <delete>
+      <fileset basedir="${dirs.drop}\${folder.gems}\lib" >
+        <include name="*/**" />
+      </fileset>
+    </delete>
+  </target>
+
 </project>

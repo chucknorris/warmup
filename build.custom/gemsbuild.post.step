@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project name="CUSTOM POST GEMSBUILD" default="go">
+  <!-- Project UppercuT - http://projectuppercut.org -->
+  <property name="build.config.settings" value="__NONE__" overwrite="false" />
+  <include buildfile="${build.config.settings}" if="${file::exists(build.config.settings)}" />
+  <property name="dirs.current" value="${directory::get-parent-directory(project::get-buildfile-path())}" />
+  <property name="path.to.toplevel" value=".." />
+  <property name="folder.code_drop" value="code_drop" overwrite="false" />
+  <property name="dirs.drop" value="${dirs.current}\${path.to.toplevel}\${folder.code_drop}" overwrite="false" />
+  <property name="folder.gems" value="gems" overwrite="false" />
+  
+  <target name="go" depends="run_tasks" />
+  
+  <target name="run_tasks">
+    <delete>
+      <fileset basedir="${dirs.drop}/${folder.gems}" >
+        <exclude name="*.gem" />
+        <include name="**/*" />
+      </fileset>
+    </delete>
+  </target>
+  
+</project>
