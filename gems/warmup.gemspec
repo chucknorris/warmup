@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'warmup'
   s.version     = version
-  s.files = Dir['lib/**/*'] + Dir['bin/**/*']
+  s.files = Dir['bin/**/*'] #+ Dir['lib/**/*'] 
   s.bindir = 'bin'
   s.executables << 'warmup'
   
