@@ -8,3 +8,4 @@ build_output
 SolutionVersion.cs
 SolutionVersion.vb
 *.cache
+*.orig
