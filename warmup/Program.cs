@@ -26,7 +26,6 @@ namespace warmup
             string target = null;
             if (args.Length > 2) target = args[2];
 
-
             var td = new TargetDir(name);
             IExporter exporter = GetExporter();
             exporter.Export(WarmupConfiguration.settings.SourceControlWarmupLocation, templateName, td);

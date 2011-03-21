@@ -50,7 +50,6 @@ namespace warmup
                 var templateName = piecesOfPath[1];
                 GitTemplateExtractor extractor = new GitTemplateExtractor(target, templateName);
                 extractor.Extract();
-
                 //string git_directory = Path.Combine(target.FullPath, ".git");
                 //if (Directory.Exists(git_directory))
                 //{
@@ -63,7 +62,6 @@ namespace warmup
         public void Export(string sourceControlWarmupLocation, string templateName, TargetDir targetDir)
         {
             var baseUri = new Uri(WarmupConfiguration.settings.SourceControlWarmupLocation + templateName);
-
             Console.WriteLine("git exporting to: {0}", targetDir.FullPath);
             Clone(baseUri, targetDir);
         }
