@@ -15,7 +15,7 @@ NOTE: Please use Chocolatey NuGet (chocolatey) to install warmup.</description>
     <projectUrl>https://github.com/chucknorris/warmup</projectUrl>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <tags>template solution chocolatey</tags>
+    <tags>template solution chocolatey chucknorris</tags>
     <!--<iconUrl>32x32.png</iconUrl>-->
   </metadata>
 </package>
