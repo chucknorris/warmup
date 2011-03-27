@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata>
+    <id>warmup</id>
+    <title>WarmuP</title>
+    <version>DO_NOT_EDIT</version>
+    <authors>Dru Sellers, Rob Reynolds</authors>
+    <owners>Rob Reynolds</owners>
+    <summary>WarmuP is a solution level token replacer. You keep your templates in source control so you can maintain changes to them.</summary>
+    <description>WarmuP is a solution level token replacer. You keep your templates in source control so you can maintain changes to them. 
+    This will install to C:\NuGet\ and will update your path variable to include C:\NuGet\bin.
+    Please see http://devlicious.com/blogs/rob_reynolds/archive/2010/02/01/warmup-getting-started.aspx and http://codebetter.com/drusellers/2009/09/26/warmup for more information.</description>
+    <projectUrl>https://github.com/chucknorris/warmup</projectUrl>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>template solution</tags>
+    <!--<iconUrl>32x32.png</iconUrl>-->
+    <dependencies>
+      <dependency id="chocolatey" version="0.5.0.0" />
+    </dependencies>
+  </metadata>
+</package>
