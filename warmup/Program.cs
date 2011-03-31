@@ -19,8 +19,13 @@ namespace warmup
     {
         static void Main(string[] args)
         {
+            if (args == null || args.Length < 2)
+            {
+                ShowHelp();
+                Environment.Exit(-1);
+            }
             //parse out command line
-            // warmup web FHLBank.Grouping
+            // warmup web newprojName
             string templateName = args[0];
             string name = args[1];
             string target = null;
@@ -32,6 +37,23 @@ namespace warmup
             Console.WriteLine("replacing tokens");
             td.ReplaceTokens(name);
             td.MoveToDestination(target);
+        }
+
+        private static void ShowHelp()
+        {
+            Console.WriteLine("==========");
+            Console.WriteLine("WarmuP");
+            Console.WriteLine("==========");
+            Console.WriteLine("current settings");
+            Console.WriteLine("----------");
+            Console.WriteLine("Your current configuration is set to {0} ({1}).", WarmupConfiguration.settings.SourceControlType,
+                              WarmupConfiguration.settings.SourceControlWarmupLocation);
+            Console.WriteLine("----------");
+            Console.WriteLine("usage");
+            Console.WriteLine("----------");
+            Console.WriteLine("warmup templateFolderName replacementName [targetDirectoryIfDifferentThanReplacementName]");
+            Console.WriteLine("Example: warmup base Bob");
+            Console.WriteLine("Example: 'base' is a subfolder in your warmup template that has a warmup template in it. 'Bob' is what you want to use instead of the token '__NAME__'.");
         }
 
         static IExporter GetExporter()
