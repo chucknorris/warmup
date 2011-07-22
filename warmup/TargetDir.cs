@@ -64,7 +64,7 @@ namespace warmup
                 //process contents
                 string contents = File.ReadAllText(info.FullName);
                 contents = contents.Replace(_replacementToken, name);
-                File.WriteAllText(info.FullName, contents);
+                File.WriteAllText(info.FullName, contents, Encoding.UTF8);
             }
         }
 
