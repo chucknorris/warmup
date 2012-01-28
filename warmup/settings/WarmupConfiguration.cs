@@ -79,5 +79,14 @@ namespace warmup.settings
         {
             get { return (IgnoredFileTypeCollection) base["ignoredExtensions"]; }
         }
+
+        /// <summary>
+        /// Gets the text replace collection.
+        /// </summary>
+        [ConfigurationProperty("textReplaces", IsDefaultCollection = false)]
+        public TextReplaceCollection TextReplaceCollection
+        {
+            get { return (TextReplaceCollection)base["textReplaces"]; }
+        }
     }
 }

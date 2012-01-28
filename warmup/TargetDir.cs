@@ -10,6 +10,7 @@
 // under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the 
 // specific language governing permissions and limitations under the License.
+
 namespace warmup
 {
     using System;
@@ -17,6 +18,7 @@ namespace warmup
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using settings;
 
     [DebuggerDisplay("{FullPath}")]
@@ -57,15 +59,33 @@ namespace warmup
             List<string> ignoredExtensions = GetIgnoredExtensions();
             foreach (var info in point.GetFiles("*.*", SearchOption.AllDirectories))
             {
-                if (ignoredExtensions.Contains(info.Extension)) continue;
+                if (ignoredExtensions.Contains(info.Extension, StringComparer.InvariantCultureIgnoreCase)) continue;
+
                 //skip the .git directory
                 if (new[] {"\\.git\\"}.Contains(info.FullName)) continue;
 
+                // skip readonly and hidden files
+                if (info.IsReadOnly || (info.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden) continue;                
+
                 //process contents
                 string contents = File.ReadAllText(info.FullName);
+                
+                // replace main token
                 contents = contents.Replace(_replacementToken, name);
+
+                // replace custom tokens
+                foreach (TextReplaceItem replaceItem in GetReplaceTokens())
+                {
+                    contents = contents.Replace(replaceItem.Find, replaceItem.Replace);
+                }
+
                 File.WriteAllText(info.FullName, contents, Encoding.UTF8);
             }
+        }
+
+        IEnumerable<TextReplaceItem> GetReplaceTokens()
+        {
+            return new List<TextReplaceItem>(WarmupConfiguration.settings.TextReplaceCollection.Cast<TextReplaceItem>());
         }
 
         static List<string> GetIgnoredExtensions()
