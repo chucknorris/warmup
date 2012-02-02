@@ -17,5 +17,12 @@ NOTE: Please use Chocolatey NuGet (chocolatey) to install warmup.</description>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>template solution chocolatey chucknorris</tags>
     <!--<iconUrl>32x32.png</iconUrl>-->
+    <releaseNotes>
+    v0.6.0 - See all (https://github.com/chucknorris/warmup/issues?sort=created&amp;direction=desc&amp;state=closed&amp;page=1)
+    * Fixes generated solution file (all files written as UTF8) - for details please see https://github.com/chucknorris/warmup/pull/2
+    * Custom replacement tokens are now available - for details please see https://github.com/chucknorris/warmup/pull/1
+    * AddTemplateFolder command to add templates to the template location - for details please see https://github.com/chucknorris/warmup/issues/3
+    * Update custom replacement tokens from the command line - for details please see https://github.com/chucknorris/warmup/issues/5
+    </releaseNotes>
   </metadata>
 </package>
