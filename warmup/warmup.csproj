@@ -43,10 +43,17 @@
     <Compile Include="..\SolutionVersion.cs">
       <Link>Properties\SolutionVersion.cs</Link>
     </Compile>
+    <Compile Include="commands\AddTemplateFolder.cs" />
+    <Compile Include="commands\AddTextReplacement.cs" />
+    <Compile Include="commands\GenerateWarmup.cs" />
+    <Compile Include="commands\ICommand.cs" />
     <Compile Include="Folder.cs" />
     <Compile Include="Git.cs" />
     <Compile Include="GitTemplateExtractor.cs" />
     <Compile Include="IExporter.cs" />
+    <Compile Include="infrastructure\CommandAttribute.cs" />
+    <Compile Include="infrastructure\CommonHelp.cs" />
+    <Compile Include="infrastructure\console\CommandRunner.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="settings\IgnoredFileTypeCollection.cs" />
