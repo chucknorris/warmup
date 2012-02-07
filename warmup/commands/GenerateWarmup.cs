@@ -22,15 +22,17 @@ namespace warmup.commands
             if (args.Length > 2) target = args[2];
 
             var td = new TargetDir(name);
-            IExporter exporter = GetExporter();
+            IExporter exporter = GetExporter(templateName);
             exporter.Export(WarmupConfiguration.settings.SourceControlWarmupLocation, templateName, td);
             Console.WriteLine("replacing tokens");
             td.ReplaceTokens(name);
             td.MoveToDestination(target);
         }
 
-        static IExporter GetExporter()
+        static IExporter GetExporter(string templateName)
         {
+            if (IsNotConfiguredForGitButIsGitHubUrl(templateName)) return new GitHub();
+
             switch (WarmupConfiguration.settings.SourceControlType)
             {
                 case SourceControlType.Subversion:
@@ -42,6 +44,11 @@ namespace warmup.commands
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        static bool IsNotConfiguredForGitButIsGitHubUrl(string templateName)
+        {
+            return WarmupConfiguration.settings.SourceControlType != SourceControlType.Git && templateName.Contains("github.com");
         }
 
         public void ShowHelp()
