@@ -65,7 +65,7 @@ namespace warmup
                 if (new[] {"\\.git\\"}.Contains(info.FullName)) continue;
 
                 // skip readonly and hidden files
-                if (info.IsReadOnly || (info.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden) continue;                
+                if (info.IsReadOnly || (info.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden) continue;
 
                 //process contents
                 string contents = File.ReadAllText(info.FullName);
@@ -79,8 +79,41 @@ namespace warmup
                     contents = contents.Replace(replaceItem.Find, replaceItem.Replace);
                 }
 
-                File.WriteAllText(info.FullName, contents, Encoding.UTF8);
+                var originalFileEncoding = GetFileEncoding(info.FullName);
+                File.WriteAllText(info.FullName, contents, originalFileEncoding);
             }
+        }
+
+        private Encoding GetFileEncoding(string fileName)
+        {
+            Encoding encoding = null;
+
+            var file = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+            if (file.CanSeek)
+            {
+                //use ASCII as the default if it doesn't match any of the others.
+                encoding = Encoding.ASCII;
+
+                //determine encoding based on first 4 bytes of the file.
+                var bom = new byte[4];
+                file.Read(bom, 0, 4);
+                if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf)
+                    encoding = Encoding.UTF8;
+                if (bom[0] == 0xff && bom[1] == 0xfe)
+                    encoding = Encoding.Unicode;
+                if (bom[0] == 0xfe && bom[1] == 0xff)
+                    encoding = Encoding.Unicode;
+                if (bom[0] == 0x00 && bom[1] == 0x00 && bom[2] == 0xfe && bom[3] == 0xff)
+                    encoding = Encoding.Unicode;
+
+                file.Close();
+            }
+            else
+            {
+                encoding = Encoding.ASCII;
+            }
+
+            return encoding;
         }
 
         IEnumerable<TextReplaceItem> GetReplaceTokens()
