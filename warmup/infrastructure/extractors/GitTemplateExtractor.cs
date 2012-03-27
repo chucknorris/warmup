@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace warmup
+namespace warmup.infrastructure.extractors
 {
     public class GitTemplateExtractor
     {
@@ -24,7 +24,7 @@ namespace warmup
             var files = topParent.GetFiles();
 
             if (TemplateNotFound(directories, files)) return;
-            
+
             CleanTopParent(directories, files);
 
             var templateDir = directories.FirstOrDefault(d => d.Name.Equals(_templateName, Comparison));
@@ -33,11 +33,11 @@ namespace warmup
 
         private void CleanTopParent(IEnumerable<DirectoryInfo> directories, IEnumerable<FileInfo> files)
         {
-            foreach (var directory in directories.Where(directory => 
-                directory.Name != _templateName))
+            foreach (var directory in directories.Where(directory =>
+                                                        directory.Name != _templateName))
                 DeleteDirectory(directory);
-            foreach (var file in files.Where(file => 
-                !file.Name.Equals(_templateName + file.Extension, Comparison)))
+            foreach (var file in files.Where(file =>
+                                             !file.Name.Equals(_templateName + file.Extension, Comparison)))
                 SafeDeleteFile(file);
         }
 

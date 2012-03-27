@@ -8,7 +8,7 @@ namespace warmup
     {
         private static void Main(string[] args)
         {
-            if (args == null)
+            if (args.Length == 0)
             {
                 CommonHelp.ShowHelp();
                 Environment.Exit(-1);

@@ -19,7 +19,7 @@ namespace warmup
     using System.IO;
     using System.Linq;
     using System.Text;
-    using settings;
+    using infrastructure.settings;
 
     [DebuggerDisplay("{FullPath}")]
     public class TargetDir

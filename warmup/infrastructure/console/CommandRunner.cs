@@ -12,7 +12,7 @@ namespace warmup.infrastructure.console
             return Run(process, arguments, waitForExit, true);
         }
 
-        public static int Run(string process, string arguments, bool waitForExit,bool assertFullPath)
+        public static int Run(string process, string arguments, bool waitForExit, bool assertFullPath)
         {
             var processPath = assertFullPath ? Path.GetFullPath(process) : process;
 

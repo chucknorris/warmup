@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using warmup.infrastructure;
 using warmup.infrastructure.console;
-using warmup.settings;
+using warmup.infrastructure.settings;
 
 namespace warmup.commands
 {
@@ -11,14 +11,14 @@ namespace warmup.commands
     {
         public void Run(string[] args)
         {
-            if (args == null || args.Length !=3)
+            if (args == null || args.Length != 3)
             {
                 ShowHelp();
                 Environment.Exit(-1);
             }
 
             var linkName = args[1];
-            var targetPath = args[2].Replace("\"",string.Empty);
+            var targetPath = args[2].Replace("\"", string.Empty);
 
             var templatesFolder = WarmupConfiguration.settings.SourceControlWarmupLocation;
             if (!Directory.Exists(templatesFolder))
@@ -26,10 +26,10 @@ namespace warmup.commands
                 Directory.CreateDirectory(templatesFolder);
             }
 
-            var linkFolder = Path.Combine(templatesFolder,linkName);
-            
-            Console.WriteLine("Generating symbolic link \"{0}\" pointing to \"{1}\"",linkFolder,targetPath);
-            CommandRunner.Run("cmd.exe", string.Format("/c mklink /d \"{0}\" \"{1}\"",linkFolder,targetPath), waitForExit:true,assertFullPath:false);
+            var linkFolder = Path.Combine(templatesFolder, linkName);
+
+            Console.WriteLine("Generating symbolic link \"{0}\" pointing to \"{1}\"", linkFolder, targetPath);
+            CommandRunner.Run("cmd.exe", string.Format("/c mklink /d \"{0}\" \"{1}\"", linkFolder, targetPath), waitForExit: true, assertFullPath: false);
         }
 
         public void ShowHelp()

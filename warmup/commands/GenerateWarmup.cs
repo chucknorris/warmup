@@ -1,6 +1,7 @@
 using System;
 using warmup.infrastructure;
-using warmup.settings;
+using warmup.infrastructure.exporters;
+using warmup.infrastructure.settings;
 
 namespace warmup.commands
 {
@@ -29,7 +30,7 @@ namespace warmup.commands
             td.MoveToDestination(target);
         }
 
-        static IExporter GetExporter(string templateName)
+        private static IExporter GetExporter(string templateName)
         {
             if (IsNotConfiguredForGitButIsGitHubUrl(templateName)) return new GitHub();
 
@@ -46,7 +47,7 @@ namespace warmup.commands
             }
         }
 
-        static bool IsNotConfiguredForGitButIsGitHubUrl(string templateName)
+        private static bool IsNotConfiguredForGitButIsGitHubUrl(string templateName)
         {
             return WarmupConfiguration.settings.SourceControlType != SourceControlType.Git && templateName.Contains("github.com");
         }

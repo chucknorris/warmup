@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using warmup.infrastructure;
-using warmup.settings;
+using warmup.infrastructure.settings;
 
 namespace warmup.commands
 {
@@ -33,7 +33,7 @@ namespace warmup.commands
                 {
                     if (replaceItem.Find.ToLower() == find.ToLower())
                     {
-                        Console.WriteLine("Replacing '{0}' value of '{1}' with '{2}'.", find,replaceItem.Replace, replace);
+                        Console.WriteLine("Replacing '{0}' value of '{1}' with '{2}'.", find, replaceItem.Replace, replace);
                         replaceItem.Replace = replace;
                         itemFound = true;
                     }
@@ -41,14 +41,13 @@ namespace warmup.commands
 
                 if (!itemFound)
                 {
-                    Console.WriteLine("Adding '{0}' with a replacement of '{1}' to the configuration.",find,replace.Replace("\"",string.Empty));
-                    warmupConfig.TextReplaceCollection.Add(new TextReplaceItem { Find = find, Replace = replace });
+                    Console.WriteLine("Adding '{0}' with a replacement of '{1}' to the configuration.", find, replace.Replace("\"", string.Empty));
+                    warmupConfig.TextReplaceCollection.Add(new TextReplaceItem {Find = find, Replace = replace});
                 }
 
-               // Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                // Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                 config.Save(ConfigurationSaveMode.Full);
             }
-
         }
 
         public void ShowHelp()
