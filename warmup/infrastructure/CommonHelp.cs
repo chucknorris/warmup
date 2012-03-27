@@ -20,7 +20,7 @@ namespace warmup.infrastructure
              Console.WriteLine("usage");
              Console.WriteLine("----------");
              Console.WriteLine("warmup [command] [options]");
-             Console.WriteLine("warmup [|addTextReplacement] [options]");
+             Console.WriteLine("warmup [addTemplateFolder|addTextReplacement] [options]");
          }
     }
 }
