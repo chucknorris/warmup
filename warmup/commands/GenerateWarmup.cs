@@ -25,7 +25,7 @@ namespace warmup.commands
             var td = new TargetDir(name);
             IExporter exporter = GetExporter(templateName);
             exporter.Export(WarmupConfiguration.settings.SourceControlWarmupLocation, templateName, td);
-            Console.WriteLine("replacing tokens");
+            Console.WriteLine("Replacing tokens");
             td.ReplaceTokens(name);
             td.MoveToDestination(target);
         }
