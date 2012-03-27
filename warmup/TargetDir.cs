@@ -24,13 +24,23 @@ namespace warmup
     [DebuggerDisplay("{FullPath}")]
     public class TargetDir
     {
-        readonly string _path;
-        readonly string _replacementToken;
+        private readonly string _path;
+        private readonly IDictionary<string,string> _replacementTokens = new Dictionary<string, string>();
+        private readonly string _mainReplacementToken;
+        private readonly StringBuilder _directoryMoveTo = new StringBuilder();
 
         public TargetDir(string path)
         {
             _path = path;
-            _replacementToken = WarmupConfiguration.settings.ReplacementToken;
+            _mainReplacementToken = WarmupConfiguration.settings.ReplacementToken;
+        }
+
+        private void SetReplaceTokens(IDictionary<string, string> tokens)
+        {
+            foreach (TextReplaceItem token in WarmupConfiguration.settings.TextReplaceCollection)
+            {
+                tokens.Add(token.Find, token.Replace);
+            }
         }
 
         public string FullPath
@@ -40,47 +50,125 @@ namespace warmup
 
         public void ReplaceTokens(string name)
         {
+            // add the main token with the replacement value
+            _replacementTokens.Add(_mainReplacementToken,name);
+            SetReplaceTokens(_replacementTokens);
+           
             var startingPoint = new DirectoryInfo(FullPath);
 
             //move all directories
-            MoveAllDirectories(startingPoint, name);
+            MoveAllDirectories(startingPoint, _replacementTokens);
 
-            startingPoint = new DirectoryInfo(startingPoint.FullName.Replace(_replacementToken, name));
+            startingPoint = new DirectoryInfo(startingPoint.FullName.Replace(_mainReplacementToken, name));
 
             //move all files
-            MoveAllFiles(startingPoint, name);
+            MoveAllFiles(startingPoint, _replacementTokens);
 
             //replace file content
-            ReplaceTokensInTheFiles(startingPoint, name);
+            ReplaceTokensInTheFiles(startingPoint, _replacementTokens);
         }
 
-        void ReplaceTokensInTheFiles(DirectoryInfo point, string name)
+        private void MoveAllDirectories(DirectoryInfo dir, IDictionary<string, string> tokens)
+        {
+            _directoryMoveTo.Clear();
+
+            DirectoryInfo workingDirectory = dir;
+            var originalName = workingDirectory.Name;
+
+            _directoryMoveTo.Append(workingDirectory.Name);
+
+            foreach (var token in tokens)
+            {
+                _directoryMoveTo.Replace(token.Key, token.Value);
+            }
+
+            var newName = _directoryMoveTo.ToString();
+            if (!originalName.Equals(newName, StringComparison.InvariantCultureIgnoreCase))
+            {
+                //string newFolderName = dir.Name.Replace(_replacementToken, name);
+                string moveTo = Path.Combine(workingDirectory.Parent.FullName, newName);
+
+                try
+                {
+                    //Console.WriteLine("Moving '{0}' to '{1}'", workingDirectory.FullName, moveTo);
+                    workingDirectory.MoveTo(moveTo);
+                    workingDirectory = new DirectoryInfo(moveTo);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Error trying to move '{0}' to '{1}'", workingDirectory.FullName, moveTo);
+                    throw;
+                }
+            }
+
+            foreach (var info in workingDirectory.GetDirectories())
+            {
+                MoveAllDirectories(info, tokens);
+            }
+        }
+
+        private void MoveAllFiles(DirectoryInfo point, IDictionary<string, string> tokens)
+        {
+            var moveTo = new StringBuilder();
+
+            foreach (var file in point.GetFiles("*.*", SearchOption.AllDirectories))
+            {
+                var originalName = file.Name;                
+
+                moveTo.Clear();
+                moveTo.Append(file.Name);
+
+                foreach (var token in tokens)
+                {
+                    moveTo.Replace(token.Key, token.Value);
+                }
+
+                string newName = moveTo.ToString();
+                if (!originalName.Equals(newName,StringComparison.InvariantCultureIgnoreCase))
+                {
+                    try
+                    {
+                        string moveFileTo = Path.Combine(file.DirectoryName, newName);
+                        //Console.WriteLine("Moving '{0}' to '{1}'", file.FullName, moveFileTo);
+                        file.MoveTo(moveFileTo);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error trying to move '{0}' to '{1}'", file.FullName, moveTo);
+                        throw;
+                    }
+                }
+            }
+        }
+
+        private void ReplaceTokensInTheFiles(DirectoryInfo point, IDictionary<string, string> tokens)
         {
             List<string> ignoredExtensions = GetIgnoredExtensions();
+
+            var fileContents = new StringBuilder();
+
             foreach (var info in point.GetFiles("*.*", SearchOption.AllDirectories))
             {
                 if (ignoredExtensions.Contains(info.Extension, StringComparer.InvariantCultureIgnoreCase)) continue;
-
                 //skip the .git directory
                 if (new[] {"\\.git\\"}.Contains(info.FullName)) continue;
-
                 // skip readonly and hidden files
                 if (info.IsReadOnly || (info.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden) continue;
 
-                //process contents
-                string contents = File.ReadAllText(info.FullName);
-                
-                // replace main token
-                contents = contents.Replace(_replacementToken, name);
 
-                // replace custom tokens
-                foreach (TextReplaceItem replaceItem in GetReplaceTokens())
+                // process contents
+                fileContents.Clear();
+                fileContents.Append(File.ReadAllText(info.FullName));
+                //string contents = File.ReadAllText(info.FullName);
+                
+                // replace tokens
+                foreach (var token in tokens)
                 {
-                    contents = contents.Replace(replaceItem.Find, replaceItem.Replace);
+                    fileContents.Replace(token.Key, token.Value);
                 }
 
                 var originalFileEncoding = GetFileEncoding(info.FullName);
-                File.WriteAllText(info.FullName, contents, originalFileEncoding);
+                File.WriteAllText(info.FullName, fileContents.ToString(), originalFileEncoding);
             }
         }
 
@@ -116,12 +204,7 @@ namespace warmup
             return encoding;
         }
 
-        IEnumerable<TextReplaceItem> GetReplaceTokens()
-        {
-            return new List<TextReplaceItem>(WarmupConfiguration.settings.TextReplaceCollection.Cast<TextReplaceItem>());
-        }
-
-        static List<string> GetIgnoredExtensions()
+        private static List<string> GetIgnoredExtensions()
         {
             var extension = new List<string>();
             foreach (IgnoredFileType ignoredFileType in WarmupConfiguration.settings.IgnoredFileTypeCollection)
@@ -130,50 +213,7 @@ namespace warmup
             }
             return extension;
         }
-
-        void MoveAllFiles(DirectoryInfo point, string name)
-        {
-            foreach (var file in point.GetFiles("*.*", SearchOption.AllDirectories))
-            {
-                string moveTo = file.FullName.Replace(_replacementToken, name);
-                try
-                {
-                    file.MoveTo(moveTo);
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine("Trying to move '{0}' to '{1}'", file.FullName, moveTo);
-                    throw;
-                }
-            }
-        }
-
-        void MoveAllDirectories(DirectoryInfo dir, string name)
-        {
-            DirectoryInfo workingDirectory = dir;
-            if (workingDirectory.Name.Contains(_replacementToken))
-            {
-                string newFolderName = dir.Name.Replace(_replacementToken, name);
-                string moveTo = Path.Combine(dir.Parent.FullName, newFolderName);
-
-                try
-                {
-                    workingDirectory.MoveTo(moveTo);
-                    workingDirectory = new DirectoryInfo(moveTo);
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine("Trying to move '{0}' to '{1}'", workingDirectory.FullName, moveTo);
-                    throw;
-                }
-            }
-
-            foreach (var info in workingDirectory.GetDirectories())
-            {
-                MoveAllDirectories(info, name);
-            }
-        }
-
+        
         public void MoveToDestination(string target)
         {
             if (string.IsNullOrEmpty(target)) return;
