@@ -1,0 +1,7 @@
+website_port: 3000
+website_deploy_directory: c:\iisexpress\website
+solution_name: __NAME__.sln
+mvc_project_directory: __NAME__ 
+test_dll: ./__NAME__.Tests/bin/debug/__NAME__.Tests.dll
+test_runner: ./packages/nspec.0.9.51/tools/NSpecRunner.exe
+iis_express: C:\Program Files (x86)\IIS Express
