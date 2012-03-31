@@ -19,11 +19,11 @@ namespace warmup
             return extension;
         }
 
-        public static void ReplaceTokensInTheFiles(DirectoryInfo point, IDictionary<string, string> tokens)
+        public static void ReplaceTokensInTheFiles(DirectoryInfo directory, IDictionary<string, string> tokens)
         {
             List<string> ignoredExtensions = GetIgnoredExtensions();
 
-            foreach (var info in point.GetFiles("*.*", SearchOption.AllDirectories))
+            foreach (var info in directory.GetFiles("*.*", SearchOption.AllDirectories))
             {
                 if (ignoredExtensions.Contains(info.Extension, StringComparer.InvariantCultureIgnoreCase)) continue;
                 //skip the .git directory
