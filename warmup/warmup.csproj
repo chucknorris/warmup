@@ -68,12 +68,15 @@
     <Compile Include="SourceControlType.cs" />
     <Compile Include="infrastructure\exporters\Svn.cs" />
     <Compile Include="TargetDir.cs" />
+    <Compile Include="TokenReplacement.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
