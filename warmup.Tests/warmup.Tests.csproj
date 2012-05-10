@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SolutionVersion.cs">
+      <Link>Properties\SolutionVersion.cs</Link>
+    </Compile>
     <Compile Include="DebuggerShim.cs" />
     <Compile Include="describe_TokenReplacement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
