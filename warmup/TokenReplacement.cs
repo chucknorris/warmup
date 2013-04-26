@@ -28,8 +28,8 @@ namespace warmup
                 if (ignoredExtensions.Contains(info.Extension, StringComparer.InvariantCultureIgnoreCase)) continue;
                 //skip the .git directory
                 if (new[] { "\\.git\\" }.Contains(info.FullName)) continue;
-                // skip readonly and hidden files
-                if (info.IsReadOnly || (info.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden) continue;
+                // skip hidden files
+                if ((info.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden) continue;
 
                 ReplaceTokenInFile(info, tokens);
             }
@@ -37,6 +37,9 @@ namespace warmup
 
         public static void ReplaceTokenInFile(FileInfo info, IDictionary<string, string> tokens)
         {
+            var originalAttributes = File.GetAttributes(info.FullName); // hold original attributes
+            File.SetAttributes(info.FullName, originalAttributes & ~FileAttributes.ReadOnly); // make file writeable
+
             var fileContents = new StringBuilder(File.ReadAllText(info.FullName));
 
             foreach (var token in tokens) fileContents.Replace(token.Key, token.Value);
@@ -44,6 +47,7 @@ namespace warmup
             var originalFileEncoding = GetFileEncoding(info.FullName);
 
             File.WriteAllText(info.FullName, fileContents.ToString(), originalFileEncoding);
+            File.SetAttributes(info.FullName, originalAttributes); // restore attributes to file
         }
 
         public static Encoding GetFileEncoding(string fileName)

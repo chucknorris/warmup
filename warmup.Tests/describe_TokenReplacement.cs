@@ -17,6 +17,8 @@ namespace warmup.Tests
 
         void file_encodings()
         {
+            beforeEach = () => File.SetAttributes(@"BomTestFiles\DynamicBlog.slnfile", FileAttributes.ReadOnly);
+
             it["UTF8 encoding is retained after token replacement"] = () =>
             {
                 string slnFile = @"BomTestFiles\DynamicBlog.slnfile";
@@ -38,6 +40,8 @@ namespace warmup.Tests
 
         void replacing_tokens()
         {
+            before = () => File.SetAttributes(@"BomTestFiles\DynamicBlog.slnfile", FileAttributes.ReadOnly);
+
             it["tokens in file are replaced with new value"] = () =>
             {
                 string slnFile = @"BomTestFiles\DynamicBlog.slnfile";
