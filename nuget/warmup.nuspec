@@ -8,14 +8,14 @@
     <owners>Rob Reynolds</owners>
     <summary>WarmuP is a solution level token replacer. You keep your templates in source control so you can maintain changes to them.</summary>
     <description>WarmuP is a solution level token replacer. You keep your templates in source control so you can maintain changes to them. 
-    This will install to C:\NuGet\ and will update your path variable to include C:\NuGet\bin.
-    Please see http://devlicious.com/blogs/rob_reynolds/archive/2010/02/01/warmup-getting-started.aspx and http://codebetter.com/drusellers/2009/09/26/warmup for more information.
+ 
+Please see http://devlicious.com/blogs/rob_reynolds/archive/2010/02/01/warmup-getting-started.aspx and http://codebetter.com/drusellers/2009/09/26/warmup for more information.
     
-NOTE: Please use Chocolatey NuGet (chocolatey) to install warmup.</description>
+</description>
     <projectUrl>https://github.com/chucknorris/warmup</projectUrl>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <tags>template solution chocolatey chucknorris</tags>
+    <tags>template solution token replacement chucknorris</tags>
     <!--<iconUrl>32x32.png</iconUrl>-->
     <releaseNotes>
     v0.6.0 - See all (https://github.com/chucknorris/warmup/issues?sort=created&amp;direction=desc&amp;state=closed&amp;page=1)
