@@ -2,6 +2,7 @@ using System;
 using warmup.infrastructure;
 using warmup.infrastructure.exporters;
 using warmup.infrastructure.settings;
+using System.IO;
 
 namespace warmup.commands
 {
@@ -21,6 +22,22 @@ namespace warmup.commands
             string name = args[1];
             string target = null;
             if (args.Length > 2) target = args[2];
+
+            if (WarmupConfiguration.settings.SourceControlType == SourceControlType.FileSystem)
+            {
+                if (!Directory.Exists(WarmupConfiguration.settings.SourceControlWarmupLocation))
+                {
+                    Console.WriteLine("Template directory not found");
+                    Environment.Exit(-1);
+                }
+
+                if (!Directory.Exists(WarmupConfiguration.settings.SourceControlWarmupLocation + "\\" + templateName))
+                {
+                    Console.WriteLine("Template not found");
+                    Environment.Exit(-1);
+                }
+            }
+
 
             var td = new TargetDir(name);
             IExporter exporter = GetExporter(templateName);
